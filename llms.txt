@@ -1,0 +1,5 @@
+# RepoSentinel
+> Native macOS app (SwiftUI/SwiftPM) that scans a Mac, local git repos and GitHub for the PolinRider worm and triages hits with Apple's on-device FoundationModels.
+- [AGENTS.md](AGENTS.md): commands, layout, invariants for coding agents
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): scan lifecycle, pause/stop, verdict logic
+- [README.md](README.md): features, install, privacy

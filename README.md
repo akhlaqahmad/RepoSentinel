@@ -43,6 +43,7 @@ open dist/RepoSentinel.app
 First launch of an ad-hoc-signed build: right-click → **Open**. For distribution, sign with a Developer ID and notarize — see [docs/RELEASING.md](docs/RELEASING.md).
 
 ## Develop
+Open **`RepoSentinel.xcodeproj`** in Xcode (⌘R to run, ⌘U to test), or use SwiftPM:
 ```bash
 swift build            # debug build
 swift test             # unit tests (Swift Testing)

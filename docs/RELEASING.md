@@ -18,3 +18,6 @@ This is a Swift package, so signing happens in `scripts/build.sh`, but the certi
 5. `NOTARY_PROFILE=my-profile ./scripts/build.sh` → signed, notarized, stapled DMG in `dist/`.
 
 Signing identity order used by the script: `$SIGN_ID` → Developer ID Application → Apple Development (this Mac only) → ad-hoc.
+
+## Releasing from Xcode instead
+Open `RepoSentinel.xcodeproj` → Signing & Capabilities → choose your Team → **Product ▸ Archive** → **Distribute App ▸ Direct Distribution** (Developer ID + notarization handled by Xcode). Export the `.app`, then wrap it in a DMG with `hdiutil` (see the end of `scripts/build.sh`).

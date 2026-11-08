@@ -2,3 +2,5 @@
 dist/
 *.app
 .DS_Store
+xcuserdata/
+*.xcuserstate

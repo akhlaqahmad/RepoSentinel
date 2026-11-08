@@ -1,0 +1,50 @@
+# Source of truth for RepoSentinel.xcodeproj — regenerate with: xcodegen
+name: RepoSentinel
+options:
+  bundleIdPrefix: com.akhlaq
+  deploymentTarget: { macOS: "26.0" }
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    ENABLE_HARDENED_RUNTIME: YES
+    ENABLE_APP_SANDBOX: NO          # must read arbitrary repos and run `gh`
+    DEAD_CODE_STRIPPING: YES
+    ARCHS: arm64                    # FoundationModels / Apple Intelligence = Apple silicon
+    CODE_SIGN_STYLE: Automatic
+    # Pick your team in Xcode → Signing & Capabilities, or: xcodebuild … DEVELOPMENT_TEAM=<TEAMID>
+targets:
+  RepoSentinel:
+    type: application
+    platform: macOS
+    sources:
+      - Sources/RepoSentinel
+      - { path: Resources/Assets.xcassets }
+    info: { path: Resources/Info.plist }
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.akhlaq.reposentinel
+        PRODUCT_NAME: RepoSentinel
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_FILE: Resources/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        ENABLE_TESTABILITY: YES
+  RepoSentinelTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [Tests/RepoSentinelTests]
+    dependencies: [{ target: RepoSentinel }]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.akhlaq.reposentinel.tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/RepoSentinel.app/Contents/MacOS/RepoSentinel"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+schemes:
+  RepoSentinel:
+    build: { targets: { RepoSentinel: all, RepoSentinelTests: [test] } }
+    run: { config: Debug, commandLineArguments: { "--selftest": false, "--selftest-engine": false } }
+    test: { config: Debug, targets: [RepoSentinelTests] }
+    archive: { config: Release }

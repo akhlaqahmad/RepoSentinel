@@ -16,6 +16,9 @@ SwiftUI macOS app (SwiftPM, no Xcode project) that scans for the PolinRider worm
 
 Swift language mode is **v5** (set in `Package.swift`); toolchain is Swift 6.x / Xcode 27.
 
+## Xcode project
+`RepoSentinel.xcodeproj` is generated from `project.yml` (`xcodegen`) and shares `Sources/` and `Tests/` with `Package.swift`. After adding/removing files or changing settings, edit `project.yml` and run `xcodegen`; commit both. Build check: `xcodebuild -project RepoSentinel.xcodeproj -scheme RepoSentinel -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build`.
+
 ## Layout
 ```
 Sources/RepoSentinel/

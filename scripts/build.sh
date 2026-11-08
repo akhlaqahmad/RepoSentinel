@@ -7,6 +7,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 VERSION="${VERSION:-1.0.0}"; BUILD="${BUILD:-$(git rev-list --count HEAD 2>/dev/null || echo 1)}"
 SIGN_ID="${SIGN_ID:-$(security find-identity -v -p codesigning | grep 'Developer ID Application' | head -1 | sed 's/.*"\(.*\)"/\1/' || true)}"
+# Fallback: a personal Apple Development cert (stable signature, runs on this Mac / your team only), then ad-hoc.
+[ -z "$SIGN_ID" ] && SIGN_ID=$(security find-identity -v -p codesigning | grep 'Apple Development' | head -1 | sed 's/.*"\(.*\)"/\1/' || true)
 SIGN_ID="${SIGN_ID:--}"
 APP=dist/RepoSentinel.app
 swift test 2>&1 | tail -2
@@ -42,6 +44,7 @@ codesign --verify --strict --verbose=1 $APP 2>&1 | tail -1
 # DMG with an Applications shortcut
 STAGE=$(mktemp -d); cp -R $APP "$STAGE/"; ln -s /Applications "$STAGE/Applications"
 hdiutil create -quiet -volname "RepoSentinel $VERSION" -srcfolder "$STAGE" -ov -format UDZO "dist/RepoSentinel-$VERSION.dmg"; rm -rf "$STAGE"
+[ "$SIGN_ID" != "-" ] && codesign --force --sign "$SIGN_ID" "dist/RepoSentinel-$VERSION.dmg"
 if [ -n "${NOTARY_PROFILE:-}" ] && [ "$SIGN_ID" != "-" ]; then
   xcrun notarytool submit "dist/RepoSentinel-$VERSION.dmg" --keychain-profile "$NOTARY_PROFILE" --wait
   xcrun stapler staple "dist/RepoSentinel-$VERSION.dmg"
